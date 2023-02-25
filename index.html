@@ -1,21 +1,81 @@
 <!Doctype Html>  
 <Html>     
-<Head>      
+<Head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.8">
+      
 <Title>GOOGLY EYES</Title>
 <style>
-    .orange {background-image:url('../orange.png');
-                 background-repeat:repeat; padding:30px; color:white;}
+    .orange {
+    background-image: url('orange.png');
+    width: 1000px; height: 1000px; padding: 30px; color:black;
+    background-repeat:no-repeat; background-attachment: fixed; background-position: center;
+    } 
+    div#face {
+	width: 20vw;
+	height: 20vw;
+	margin: 0 auto;
+	position: relative; 
+	background: transparent;
+    margin-top: 18rem;
+    margin-left: 32rem;
+    }
+    div#face, div#face * { 
+        border-radius: 50%;
+    }
+    .eye {
+        width: 25%;
+        height: 25%;
+        background: #fff;
+        position: absolute;
+        top: 20%;
+    }
+    .left.eye { left: 20%; }
+    .right.eye { right: 20%; }
+    .pupil { 
+        background: #000;
+        width: 50%;
+        height: 50%;
+        position: relative;
+        left: 25%;
+        transform-origin: bottom;
+    }
 </style>
 </Head>  
 
-<Body>
+<Body style="background-color:#fafaf8;">
 
     <div class="orange">
-        This text is on top of a repeating background.
+        <div id="face">
+            <div class="left eye">
+                <div class="pupil"></div>
+            </div>
+            <div class="right eye">
+                <div class="pupil"></div>
+            </div>
+        </div>
     </div>
-
+    
 <script>
+    var pupils = document.querySelectorAll(".pupil");
 
+    for (var i = 0; i < pupils.length; i++) {
+        var offset = pupils[i].getBoundingClientRect();
+        pupils[i]['centerX'] = offset.left + offset.width/2,
+        pupils[i]['centerY'] = offset.bottom;
+    }
+
+    function googly(e) {
+        mouseX = e.clientX + window.pageXOffset,
+        mouseY = e.clientY + window.pageYOffset;
+        for (var i = 0; i < pupils.length; i++) {
+            pupils[i]['radians'] = Math.atan2(mouseX - pupils[i]['centerX'], mouseY - pupils[i]['centerY']),
+            pupils[i]['degree'] = (pupils[i]['radians'] * (180 / Math.PI) * -1); 
+            pupils[i].style.transform = 'rotate('+ (pupils[i]['degree'] + 180) + 'deg)';
+        }
+    }
+
+    window.addEventListener('mousemove', googly);
 </script> 
 </Body>  
 
